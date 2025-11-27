@@ -3,12 +3,13 @@ name: build-and-lint
 on:
   push:
     branches:
-      - [main,dev]
+      - main
+      - dev
   pull_request:
     branches:
-      - [main,dev]
+      - main
+      - dev
 
-  # you can define multiple jobs
 jobs:
   build-and-lint:
     runs-on: ubuntu-latest
@@ -20,7 +21,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 24
+          node-version: 20
 
       - name: Install backend dependencies
         working-directory: server
@@ -29,18 +30,17 @@ jobs:
       - name: Lint backend
         working-directory: server
         run: npm run lint -- --max-warnings=0
-        
+
       - name: Install frontend dependencies
         working-directory: client
         run: npm ci
 
       - name: Lint frontend
-        working-directory: client 
+        working-directory: client
         run: npm run lint -- --max-warnings=0
 
-      - name: Build backend-Image
-        run : docker build -t backend ./server
+      - name: Build backend Image
+        run: docker build -t backend ./server
 
-      - name: Build frontend-Image
-        run : docker build -t frontend ./client
-
+      - name: Build frontend Image
+        run: docker build -t frontend ./client
